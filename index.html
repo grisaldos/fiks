@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Modal dengan Background Blur</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  min-height: 200vh;
+  background: linear-gradient(135deg, #0f3d3e, #1b6f6b);
+  overflow-x: hidden;
+  transition: filter 0.5s ease;
+}
+
+/* ===== BACKGROUND GRID ===== */
+@media (max-width: 1024px){
+    .bg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 40px;
+  transition: filter 0.5s ease;
+}
+}
+
+
+.grid-description {
+  margin: 30px 40px;
+  padding: 20px 30px;
+  border-radius: none;
+  background: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: none;
+  color: #ffffff;
+  text-align: center;
+  transition: filter 0.5s ease;
+}
+
+.grid-description h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.grid-description p {
+  font-size: 15px;
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.bg-grid div {
+  border-radius: 14px;
+  background-size: cover;
+  background-position: center;
+  height: 200px;
+}
+
+/* Contoh gambar */
+.bg-grid div:nth-child(1) { background-image: url("https://picsum.photos/500/400?1"); }
+.bg-grid div:nth-child(2) { background-image: url("https://picsum.photos/500/400?2"); }
+.bg-grid div:nth-child(3) { background-image: url("https://picsum.photos/500/400?3"); }
+.bg-grid div:nth-child(4) { background-image: url("https://picsum.photos/500/400?4"); }
+.bg-grid div:nth-child(5) { background-image: url("https://picsum.photos/500/400?5"); }
+.bg-grid div:nth-child(6) { background-image: url("https://picsum.photos/500/400?6"); }
+.bg-grid div:nth-child(7) { background-image: url("https://picsum.photos/500/400?7"); }
+.bg-grid div:nth-child(8) { background-image: url("https://picsum.photos/500/400?8"); }
+
+/* ===== MODAL ===== */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 420px;
+  padding: 42px;
+  border-radius: 24px;
+  background: rgba(20, 60, 60, 0.85);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+  text-align: center;
+  color: #fff;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  transition: all 0.5s ease;
+  z-index: 100;
+}
+
+.modal.active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal.popout {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 25px;
+}
+
+.logo span {
+  color: #4fd1c5;
+}
+
+.modal h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 35px;
+}
+
+.modal button {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 13px 38px;
+  font-size: 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.modal button:hover {
+  transform: scale(1.08);
+  box-shadow: 0 10px 25px rgba(255,255,255,0.35);
+}
+</style>
+</head>
+
+<body>
+
+<!-- BACKGROUND GRID -->
+<div class="bg-grid">
+  <div></div><div></div><div></div><div></div>
+  <div></div><div></div><div></div><div></div>
+</div>
+
+<!-- Deskripsi Grid dengan Blur -->
+<div class="grid-description">
+  <h2>Koleksi Gambar</h2>
+  <p>
+    “Selamat Tahun Baru ✨ Di pergantian tahun ini, ada satu hal yang ingin aku syukuri lebih dari apa pun, yaitu kehadiranmu. Tahun yang lalu mengajarkanku banyak hal, dan salah satu yang paling berarti adalah bagaimana namamu selalu hadir dalam doa dan harapanku. Semoga di tahun yang baru ini, kamu selalu dikelilingi kebahagiaan, dilindungi dalam setiap langkah, dan diberi ketenangan dalam hati. Aku berharap senyummu semakin sering muncul, impianmu semakin dekat untuk digenggam, dan hari-harimu dipenuhi hal-hal baik yang pantas kamu dapatkan. Terima kasih sudah menjadi seseorang yang begitu istimewa. Semoga tahun ini membawa cerita yang lebih indah dan alasan baru untuk tersenyum.”
+</div>
+
+<!-- MODAL STEP 1 -->
+<div class="modal active" id="modal1">
+  <div class="logo"><span></span> Microsoft Edge</div>
+  <h1>Let's celebrate what<br>made 2025 special</h1>
+  <button id="next1">Next</button>
+</div>
+
+<script>
+const modal1 = document.getElementById("modal1");
+const next1 = document.getElementById("next1");
+const grid = document.querySelector('.bg-grid');
+const desc = document.querySelector('.grid-description');
+const body = document.body;
+
+// Saat modal muncul
+window.addEventListener('load', () => {
+  grid.style.filter = "blur(10px)";
+  desc.style.filter = "blur(10px)";
+  body.style.overflow = "hidden";
+});
+
+// Saat modal pop out
+next1.addEventListener("click", () => {
+  modal1.classList.remove("active");
+  modal1.classList.add("popout");
+
+  modal1.addEventListener("transitionend", () => {
+    modal1.style.display = "none";
+    grid.style.filter = "none";
+    desc.style.filter = "none";
+    body.style.overflow = "auto";
+  }, { once: true });
+});
+</script>
+
+</body>
+</html>
